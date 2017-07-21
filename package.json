@@ -1,0 +1,31 @@
+{
+  "name": "webpack-study",
+  "version": "1.0.0",
+  "description": "study for webpack",
+  "main": "yufei.xue",
+  "scripts": {
+    "dev": "webpack-dev-server --port 8089 --open",
+    "build": "webpack",
+    "test": "npm run start"
+  },
+  "keywords": [
+    "webpack",
+    "study"
+  ],
+  "author": "yufei.xue",
+  "license": "ISC",
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.16",
+    "css-loader": "^0.28.4",
+    "file-loader": "^0.11.2",
+    "html-webpack-plugin": "^2.29.0",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.2.0",
+    "webpack-dev-server": "^2.5.1",
+    "webpack-manifest-plugin": "^1.1.2"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1"
+  }
+}
