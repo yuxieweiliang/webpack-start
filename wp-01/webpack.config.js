@@ -9,17 +9,16 @@ const publicPath = path.resolve(__dirname, 'dist');
 module.exports = {
   // 坑爹的输出文件顺序竟然是按照字母排序来的
   entry: {
-    'js/app': './src/index.js',
-    'js/print': './src/print.js',
+    'js/app': './src/index',
+    'js/print': './src/print',
     // 将所有公用的东西都放在一个文件里
-    common: ['lodash', 'moment']
+    vendors: ['./src/main1', './src/main2', 'lodash', 'react', 'react-dom', 'prop-types']
   },
   // 输出文件
   output: {
     filename: '[name].[chunkhash:6].js',
     path: publicPath
   },
-  //devtool: 'cheap-module-source-map',
   resolve: {
     extensions: ['.scss', '.js', '.jsx', '.htm', '.json', '.html', '.es6'],
     modules: ['node_modules']
@@ -58,8 +57,14 @@ module.exports = {
    * 配置外部访问的公共代码
    */
   externals: {
+
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      react: 'react',
+      reactDOM: 'reactDOM',
+      propTypes: 'prop-types'
+    }),
     // 输出一个资源映射的json 似乎没有什么卵用
     new ManifestPlugin({
       fileName: 'manifest.json'
@@ -79,30 +84,23 @@ module.exports = {
       inject: 'body',
     }),
 
-    // 启动之后用指定浏览器自动打开
-    // 然而在script中使用 --open就可以打开，这里写着确实有些没有意义
-    /*new OpenBrowserPlugin({
-      url: 'http://localhost:8088/',
-      delay: 500,
-      browser: 'Chrome'
-    })*/
-    // 全局 React相关
-    new webpack.ProvidePlugin({
-      'moment': 'moment',
-      '_': 'lodash'
-    }),
 
     // 抽取公用脚本
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'common',
-      filename: "js/common.js",
+      name: 'vendors',
+      filename: "js/vendors.js",
       minChunks: Infinity,
     }),
     /**
      * 启用模块热替换
      */
     new webpack.HotModuleReplacementPlugin(),
-
+    // js 压缩
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
   ],
 
   // 如果命令行中配置了--port 则会优先命令行
